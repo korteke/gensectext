@@ -54,6 +54,10 @@ func init() {
 
 func main() {
 	flag.Parse()
+	if flag.NFlag() == 0 {
+		flag.Usage()
+		os.Exit(0)
+	}
 
 	if *generateKeys {
 		if err := generateKey(*name, *email, []byte(*passphrase)); err != nil {
