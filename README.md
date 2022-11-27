@@ -40,7 +40,7 @@ Usage of gensectext:
 
 ### Generate private PGP key (Optional)
 ```
-➜  gensectext git:(main) ✗ go run main.go -generateKeys -name "Test" -email "security@example.text" -passphrase testtest
+➜  gensectext git:(main) ✗ ./gensectext -generateKeys -name "Test" -email "security@example.text" -passphrase testtest
 2022/11/27 14:48:17 Generated private PGP key: priv.key
 ➜  gensectext git:(main) ✗ 
 ```
