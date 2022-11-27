@@ -38,16 +38,16 @@ Usage of gensectext:
 ```
 ### Default usage - Generate security.txt with PGP signature
 ```
-➜  gensectext git:(master) ✗ ./gensectext -privKey priv.key -passphrase RealSecretPassphrase
+➜  gensectext git:(main) ✗ ./gensectext -privKey priv.key -passphrase RealSecretPassphrase
 2022/11/27 02:35:36 Security.txt file(s) generated!
-➜  gensectext git:(master) ✗
+➜  gensectext git:(main) ✗
 ```
 
 ### Just generate file without signature
 ```
-➜  gensectext git:(master) ✗ ./gensectext -sign=false
+➜  gensectext git:(main) ✗ ./gensectext -sign=false
 2022/11/27 02:39:43 Security.txt file(s) generated!
-➜  gensectext git:(master) ✗
+➜  gensectext git:(main) ✗
 ```
 
 # Configuration
