@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"flag"
-	"fmt"
 	"github.com/ProtonMail/gopenpgp/v2/helper"
 	"log"
 	"os"
@@ -23,11 +22,13 @@ const (
 )
 
 var (
-	configFile *string
-	privateKey *string
-	passphrase *string
-	generate   *bool
-	sign       *bool
+	configFile   *string
+	privateKey   *string
+	passphrase   *string
+	generateKeys *bool
+	name         *string
+	email        *string
+	sign         *bool
 )
 
 type SecText struct {
@@ -43,17 +44,23 @@ type SecText struct {
 
 func init() {
 	configFile = flag.String("configFile", "config.json", "Configuration file for template")
-	privateKey = flag.String("privKey", "priv.key", "Private GPG key")
-	passphrase = flag.String("passphrase", "", "Passphrase for private GPG key")
-	generate = flag.Bool("generate", false, "Generate private GPG key")
-	sign = flag.Bool("sign", true, "Sign security.txt with GPG")
+	privateKey = flag.String("privKey", "priv.key", "Private PGP key")
+	passphrase = flag.String("passphrase", "", "Passphrase for private PGP key")
+	generateKeys = flag.Bool("generateKeys", false, "Generate private PGP key")
+	name = flag.String("name", "", "Display name for PGP key")
+	email = flag.String("email", "", "Email address for PGP key")
+	sign = flag.Bool("sign", true, "Sign security.txt with PGP")
 }
 
 func main() {
 	flag.Parse()
 
-	if *generate == true {
-		fmt.Println("WIP, this will generate key in future!")
+	if *generateKeys {
+		if err := generateKey(*name, *email, []byte(*passphrase)); err != nil {
+			log.Fatalln("error creating new PGP private key")
+		}
+		log.Println("Generated private PGP key:", *privateKey)
+		os.Exit(0)
 	}
 
 	file, err := os.Open(*configFile)
@@ -73,7 +80,7 @@ func main() {
 	err = t.Execute(f, sectext)
 	checkErr(err)
 
-	if *sign == true {
+	if *sign {
 		unsignedFile, err := os.ReadFile(securityTextFileUnsigned)
 		checkErr(err)
 		privKey, err := readPrivatekey()
@@ -113,11 +120,13 @@ func checkErr(e error) {
 	}
 }
 
-// TODO: Need to implement
-func generateKey(name string, email string, pass []byte) string {
+func generateKey(name string, email string, pass []byte) error {
 	rsaKey, err := helper.GenerateKey(name, email, pass, keyType, rsaBits)
 	checkErr(err)
-	return rsaKey
+	if err := os.WriteFile(*privateKey, []byte(rsaKey), 0400); err != nil {
+		return err
+	}
+	return nil
 }
 
 func readPrivatekey() ([]byte, error) {

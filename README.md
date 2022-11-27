@@ -16,6 +16,7 @@ and copy config.json & security.tmpl to some folder, and follow [Usage](#usage) 
 With GIT
 ```
 git clone https://github.com/korteke/gensectext.git
+go run main.go
 ```
 
 # Usage
@@ -36,6 +37,14 @@ Usage of gensectext:
 -sign
     Sign security.txt with GPG (default true)
 ```
+
+### Generate private PGP key (Optional)
+```
+➜  gensectext git:(main) ✗ go run main.go -generateKeys -name "Test" -email "security@example.text" -passphrase testtest
+2022/11/27 14:48:17 Generated private PGP key: priv.key
+➜  gensectext git:(main) ✗ 
+```
+
 ### Default usage - Generate security.txt with PGP signature
 ```
 ➜  gensectext git:(main) ✗ ./gensectext -privKey priv.key -passphrase RealSecretPassphrase
