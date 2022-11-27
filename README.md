@@ -6,11 +6,25 @@ More information can be found: [Securitytxt.org](https://securitytxt.org/)
 This will generate signed security.txt file based on values from config.json. Config.json should be self-explanatory.
 
 After generation one should need to place created `security.txt` file to web-server's .well-know -directory, so that it will be served on https://www.example.test/.well-known/security.txt 
+# Installation 
+With go install
+```
+go install github.com/korteke/gensectext@latest
+```
+and copy config.json & security.tmpl to some folder, and follow [Usage](#usage) instructions.
+
+With GIT
+```
+git clone https://github.com/korteke/gensectext.git
+```
 
 # Usage
-For signature, you need private PGP key and passphrase for that key
+For signature, you need private PGP key and passphrase for that key.
+
+`gensectext -h` shows the usage instructions 
+
 ```
-Usage of ./gensectext:
+Usage of gensectext:
 -configFile string
     Configuration file for template (default "config.json")
 -generate
