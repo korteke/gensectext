@@ -1,8 +1,8 @@
-# Generate and sign security.txt file
+# Generate and sign security.txt file (RFC-9116)
 [![MIT license](https://img.shields.io/github/license/korteke/gensectext.svg)](https://github.com/korteke/gensectext/blob/main/LICENSE.md)
 ![Build](https://github.com/korteke/gensectext/actions/workflows/go.yaml/badge.svg)
 
-More information can be found: [Securitytxt.org](https://securitytxt.org/)
+More information about security.txt -file can be found: [Securitytxt.org](https://securitytxt.org/)
 
 This will generate signed security.txt file based on values from config.json. Config.json should be self-explanatory.
 
@@ -66,7 +66,7 @@ Generate a new private pgp key if you do not have one already.
 ```
 
 # Configuration
-* security.tmpl is a template for the file, using [Go templating engine](https://pkg.go.dev/text/template)
+* security.tmpl is a template for the security.txt -file, using [Go templating engine](https://pkg.go.dev/text/template)
 * config.json contains values for template. All RFC-fields should be supported. If you don't want something, just remove it from config.json. Contact and Expires fields are required, all others are optional.   
   
 The Expires field is calculated to be 11 months from *time.Now()*
