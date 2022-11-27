@@ -1,4 +1,5 @@
 # Generate and sign security.txt file
+[![MIT license](https://img.shields.io/github/license/korteke/gensectext.svg)](https://github.com/korteke/gensectext/blob/main/LICENSE.md)
 
 More information can be found: [Securitytxt.org](https://securitytxt.org/)
 
