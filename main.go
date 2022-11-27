@@ -74,8 +74,9 @@ func main() {
 	checkErr(err)
 
 	if *sign == true {
-		privKey, _ := readPrivatekey()
-		unsignedFile, _ := os.ReadFile(securityTextFileUnsigned)
+		unsignedFile, err := os.ReadFile(securityTextFileUnsigned)
+		checkErr(err)
+		privKey, err := readPrivatekey()
 		checkErr(err)
 
 		a, err := helper.SignCleartextMessageArmored(string(privKey), []byte(*passphrase), string(unsignedFile))
@@ -83,10 +84,18 @@ func main() {
 		f, err = os.Create(securityTextFile)
 		checkErr(err)
 		if err = os.WriteFile(securityTextFile, []byte(a), 0644); err != nil {
-			os.Exit(1)
+			log.Fatalln(err)
 		}
-		defer f.Close()
-		removeHeaders()
+		defer func(f *os.File) {
+			err := f.Close()
+			if err != nil {
+				log.Fatalln(err)
+			}
+		}(f)
+
+		if err = removeHeaders(); err != nil {
+			log.Fatalln(err)
+		}
 	}
 
 	log.Print("Security.txt file(s) generated!")
@@ -116,7 +125,7 @@ func readPrivatekey() ([]byte, error) {
 	return privKey, err
 }
 
-func removeHeaders() {
+func removeHeaders() error {
 	input, err := os.ReadFile(securityTextFile)
 	checkErr(err)
 	re := regexp.MustCompile(`((?m)Version: .*|Comment: .*)`)
@@ -128,7 +137,7 @@ func removeHeaders() {
 	output := strings.Join(lines, "\n")
 	err = os.WriteFile(securityTextFile, []byte(output), 0644)
 	if err != nil {
-		log.Fatalln(err)
+		return err
 	}
-
+	return nil
 }
