@@ -25,20 +25,25 @@ For signature, you need private PGP key and passphrase for that key.
 `gensectext -h` shows the usage instructions 
 
 ```
-Usage of gensectext:
--configFile string
-    Configuration file for template (default "config.json")
--generate
-    Generate private GPG key
--passphrase string
-    Passphrase for private GPG key
--privKey string
-    Private GPG key (default "priv.key")'
--sign
-    Sign security.txt with GPG (default true)
+Usage of ./gensectext:
+  -configFile string
+        Configuration file for template (default "config.json")
+  -email string
+        Email address for PGP key
+  -generateKeys
+        Generate private PGP key
+  -name string
+        Display name for PGP key
+  -passphrase string
+        Passphrase for private PGP key
+  -privKey string
+        Private PGP key (default "priv.key")
+  -sign
+        Sign security.txt with PGP (default true)
 ```
 
 ### Generate private PGP key (Optional)
+Generate a new private pgp key if you do not have one already.
 ```
 ➜  gensectext git:(main) ✗ ./gensectext -generateKeys -name "Test" -email "security@example.text" -passphrase testtest
 2022/11/27 14:48:17 Generated private PGP key: priv.key
