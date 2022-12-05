@@ -144,10 +144,15 @@ func removeHeaders() error {
 	re := regexp.MustCompile(`((?m)Version: .*|Comment: .*)`)
 
 	lines := strings.Split(string(input), "\n")
-	for i, line := range lines {
-		lines[i] = strings.Trim(re.ReplaceAllString(line, ""), "\r\n")
+	var newLines []string
+
+	for _, line := range lines {
+		if !re.MatchString(line) {
+			newLines = append(newLines, line)
+		}
+
 	}
-	output := strings.Join(lines, "\n")
+	output := strings.Join(newLines, "\n")
 	err = os.WriteFile(securityTextFile, []byte(output), 0644)
 	if err != nil {
 		return err
