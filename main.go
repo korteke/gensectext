@@ -70,7 +70,12 @@ func main() {
 	file, err := os.Open(*configFile)
 	checkErr(err)
 	decoder := json.NewDecoder(file)
-	defer file.Close()
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			log.Fatalln("Error closing file", file.Name(), err)
+		}
+	}(file)
 	sectext := SecText{Expires: ExpiresTime()}
 
 	err = decoder.Decode(&sectext)
@@ -78,7 +83,12 @@ func main() {
 
 	f, err := os.Create(securityTextFileUnsigned)
 	checkErr(err)
-	defer f.Close()
+	defer func(f *os.File) {
+		err := f.Close()
+		if err != nil {
+			log.Fatalln("Error closing file", file.Name(), err)
+		}
+	}(f)
 
 	t := template.Must(template.ParseFiles(secTextTemplate))
 	err = t.Execute(f, sectext)
