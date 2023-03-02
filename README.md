@@ -19,6 +19,13 @@ git clone https://github.com/korteke/gensectext.git
 go build .
 ```
 
+With Docker
+```
+docker pull korteke/gensectext:latest
+docker run --rm -v $(pwd):/app korteke/gensectext:latest -privKey /app/priv.key -passphrase "testtest"
+```
+
+
 # Usage
 For signature, you need private PGP key and passphrase for that key.
 
@@ -54,6 +61,7 @@ Generate sample input files, and follow [Usage](#usage) instructions.
 2023/03/03 01:17:02 security.tmpl created
 ➜  gensectext git:(main) ✗
 ```
+With docker you need to create these files manually to bind-mount directory.
 ### Generate private PGP key (Optional)
 Generate a new private pgp key if you do not have one already.
 ```

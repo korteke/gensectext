@@ -1,0 +1,29 @@
+name: Build and push Docker image to docker hub
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: docker login
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+        run: |
+          docker login -u $DOCKER_USER -p $DOCKER_TOKEN
+      - name: Create SHORT_SHA env var
+        run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+      - name: Build the Docker image
+        run: docker build -t korteke/gensectext:${SHORT_SHA} -t korteke/gensectext:latest .
+
+      - name: Push Docker image to registry tag sha
+        run: docker push korteke/gensectext:${SHORT_SHA}
+      - name: Push Docker image to registry tag latest
+        run: docker push korteke/gensectext:latest
