@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"flag"
 	"log"
 	"os"
@@ -31,6 +32,7 @@ var (
 	email        *string
 	sign         *bool
 	expDate      *string
+	generateTmpl *bool
 )
 
 type SecText struct {
@@ -49,10 +51,12 @@ func init() {
 	privateKey = flag.String("privKey", "priv.key", "Private PGP key")
 	passphrase = flag.String("passphrase", "", "Passphrase for private PGP key")
 	generateKeys = flag.Bool("generateKeys", false, "Generate private PGP key")
+	generateTmpl = flag.Bool("generateTmpl", false, "Generate sample files")
 	name = flag.String("name", "", "Display name for PGP key")
 	email = flag.String("email", "", "Email address for PGP key")
 	sign = flag.Bool("sign", true, "Sign security.txt with PGP")
 	expDate = flag.String("date", "", "Custom expires date. Format: YYYY-MM-DD (default now+1year)")
+
 }
 
 func main() {
@@ -60,6 +64,25 @@ func main() {
 	if flag.NFlag() == 0 {
 		flag.Usage()
 		os.Exit(0)
+	}
+
+	if *generateTmpl {
+		if _, err := os.Stat(*configFile); errors.Is(err, os.ErrNotExist) {
+			f, err := os.Create(*configFile)
+			checkErr(err)
+			defer f.Close()
+
+			f.Write([]byte(configTemplate))
+			log.Println("config.json created")
+		}
+		if _, err := os.Stat(secTextTemplate); errors.Is(err, os.ErrNotExist) {
+			f, err := os.Create(secTextTemplate)
+			checkErr(err)
+			defer f.Close()
+
+			f.Write([]byte(securityTemplate))
+			log.Println("security.tmpl created")
+		}
 	}
 
 	if *generateKeys {
@@ -97,7 +120,7 @@ func main() {
 	err = t.Execute(f, sectext)
 	checkErr(err)
 
-	if *sign {
+	if *sign && *passphrase != "" {
 		unsignedFile, err := os.ReadFile(securityTextFileUnsigned)
 		checkErr(err)
 		privKey, err := readPrivatekey()

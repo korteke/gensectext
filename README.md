@@ -12,12 +12,11 @@ With go install
 ```
 go install github.com/korteke/gensectext@latest
 ```
-and copy config.json & security.tmpl to some folder, and follow [Usage](#usage) instructions.
 
 With GIT
 ```
 git clone https://github.com/korteke/gensectext.git
-go run main.go
+go build .
 ```
 
 # Usage
@@ -29,10 +28,14 @@ For signature, you need private PGP key and passphrase for that key.
 Usage of ./gensectext:
   -configFile string
         Configuration file for template (default "config.json")
+  -date string
+    	Custom expires date. Format: YYYY-MM-DD (default now+1year)
   -email string
         Email address for PGP key
   -generateKeys
         Generate private PGP key
+  -generateTmpl
+    	Generate sample files
   -name string
         Display name for PGP key
   -passphrase string
@@ -43,6 +46,14 @@ Usage of ./gensectext:
         Sign security.txt with PGP (default true)
 ```
 
+### Generate sample input files (Mandatory)
+Generate sample input files, and follow [Usage](#usage) instructions.
+```
+➜  gensectext git:(main) ✗ ./gensectext -generateTmpl
+2023/03/03 01:17:02 config.json created
+2023/03/03 01:17:02 security.tmpl created
+➜  gensectext git:(main) ✗
+```
 ### Generate private PGP key (Optional)
 Generate a new private pgp key if you do not have one already.
 ```
