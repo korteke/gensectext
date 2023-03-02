@@ -3,13 +3,14 @@ package main
 import (
 	"encoding/json"
 	"flag"
-	"github.com/ProtonMail/gopenpgp/v2/helper"
 	"log"
 	"os"
 	"regexp"
 	"strings"
 	"text/template"
 	"time"
+
+	"github.com/ProtonMail/gopenpgp/v2/helper"
 )
 
 // Constants
@@ -29,6 +30,7 @@ var (
 	name         *string
 	email        *string
 	sign         *bool
+	expDate      *string
 )
 
 type SecText struct {
@@ -50,6 +52,7 @@ func init() {
 	name = flag.String("name", "", "Display name for PGP key")
 	email = flag.String("email", "", "Email address for PGP key")
 	sign = flag.Bool("sign", true, "Sign security.txt with PGP")
+	expDate = flag.String("date", "", "Custom expires date. Format: YYYY-MM-DD (default now+1year)")
 }
 
 func main() {
@@ -124,8 +127,18 @@ func main() {
 }
 
 func ExpiresTime() string {
-	return time.Now().AddDate(0, 11, 0).UTC().Format("2006-01-02T15:04:05.000Z07:00")
+	if *expDate != "" {
+		t, err := time.Parse("2006-01-02", *expDate)
+		if err != nil {
+			log.Fatalln("Could not parse date:", err)
+		}
+		if !t.After(time.Now()) {
+			log.Fatalln("The expiry date is in the past.")
+		}
+		return t.Format("2006-01-02T15:04:05.000Z07:00")
 
+	}
+	return time.Now().AddDate(0, 12, 0).UTC().Format("2006-01-02T15:04:05.000Z07:00")
 }
 
 func checkErr(e error) {
