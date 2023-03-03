@@ -19,11 +19,13 @@ The generated `security.txt` file should be placed on the web server so that it 
 
   _or_   
 - Pre-baked Docker image is available on [Docker hub](https://hub.docker.com/r/korteke/gensectext).
-      ```
-      docker pull korteke/gensectext:latest
-      docker run --rm -v $(pwd):/app korteke/gensectext:latest -generateTmpl
-      docker run --rm -v $(pwd):/app korteke/gensectext:latest -privKey /app/priv.key -passphrase "testtest"
-      ```
+```
+docker pull korteke/gensectext:latest
+
+docker run --rm -v $(pwd):/app korteke/gensectext:latest -generateTmpl   
+
+docker run --rm -v $(pwd):/app korteke/gensectext:latest -privKey /app/priv.key -passphrase "testtest"
+```
 
 # Usage
 For digital signature, one need private PGP key and passphrase for that key.
