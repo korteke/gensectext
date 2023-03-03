@@ -11,4 +11,6 @@ RUN go build -o /go/bin/gensectext
 FROM scratch
 COPY --from=builder /go/bin/gensectext /go/bin/gensectext
 
+WORKDIR /app
+
 ENTRYPOINT ["/go/bin/gensectext"]
