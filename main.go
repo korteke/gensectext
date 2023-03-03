@@ -1,9 +1,11 @@
 package main
 
 import (
+	"bufio"
 	"encoding/json"
 	"errors"
 	"flag"
+	"fmt"
 	"log"
 	"os"
 	"regexp"
@@ -33,6 +35,8 @@ var (
 	sign         *bool
 	expDate      *string
 	generateTmpl *bool
+	printSig     *bool
+	printPlain   *bool
 )
 
 type SecText struct {
@@ -56,6 +60,8 @@ func init() {
 	email = flag.String("email", "", "Email address for PGP key")
 	sign = flag.Bool("sign", true, "Sign security.txt with PGP")
 	expDate = flag.String("date", "", "Custom expires date. Format: YYYY-MM-DD (default now+1year)")
+	printSig = flag.Bool("printSig", false, "Print signed file to stdout")
+	printPlain = flag.Bool("printPlain", false, "Print unsigned file to stdout")
 
 }
 
@@ -145,6 +151,18 @@ func main() {
 		}
 	}
 
+	if *printPlain {
+		printContent(securityTextFileUnsigned)
+		if !*printSig {
+			os.Exit(0)
+		}
+	}
+
+	if *printSig {
+		printContent(securityTextFile)
+		os.Exit(0)
+	}
+
 	log.Print("Security.txt file(s) generated!")
 
 }
@@ -204,4 +222,21 @@ func removeHeaders() error {
 		return err
 	}
 	return nil
+}
+func printContent(f string) {
+	file, err := os.Open(f)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer func() {
+		if err = file.Close(); err != nil {
+			log.Fatal(err)
+		}
+	}()
+
+	scanner := bufio.NewScanner(file)
+
+	for scanner.Scan() {
+		fmt.Println(scanner.Text())
+	}
 }

@@ -4,30 +4,28 @@
 
 More information about security.txt -file can be found: [Securitytxt.org](https://securitytxt.org/)
 
-This will generate signed security.txt file based on values from config.json. Config.json should be self-explanatory.
+This program generates a signed security.txt file based on the values found in the config.json file. The config.json file should be self-explanatory.
 
-After generation one should need to place created `security.txt` file to web-server's .well-know -directory, so that it will be served on https://www.example.test/.well-known/security.txt 
+The generated `security.txt` file should be placed on the web server so that it is served from the path ".well-known/security.txt", so the final address should be "https://www.example.test/.well-known/security.txt"
+ 
 # Installation 
-With go install
-```
-go install github.com/korteke/gensectext@latest
-```
+- [Download](https://github.com/korteke/gensectext/releases/latest) a prebuilt binary, unpack it and run!    
+    _or_ 
 
-With GIT
-```
-git clone https://github.com/korteke/gensectext.git
-go build .
-```
+- Compile with go `go install github.com/korteke/gensectext@latest` (the same command works for updating)
 
-With Docker
-```
-docker pull korteke/gensectext:latest
-docker run --rm -v $(pwd):/app korteke/gensectext:latest -privKey /app/priv.key -passphrase "testtest"
-```
+   _or_   
+- `git clone https://github.com/korteke/gensectext ; cd gensectext ; go get ; go build .`   
 
+  _or_   
+- Pre-baked Docker image is available on [Docker hub](https://hub.docker.com/r/korteke/gensectext).
+      ```
+      docker pull korteke/gensectext:latest
+      docker run --rm -v $(pwd):/app korteke/gensectext:latest -privKey /app/priv.key -passphrase "testtest"
+      ```
 
 # Usage
-For signature, you need private PGP key and passphrase for that key.
+For digital signature, one need private PGP key and passphrase for that key.
 
 `gensectext -h` shows the usage instructions 
 
@@ -47,6 +45,10 @@ Usage of ./gensectext:
         Display name for PGP key
   -passphrase string
         Passphrase for private PGP key
+  -printPlain
+    	Print unsigned file to stdout
+  -printSig
+    	Print signed file to stdout
   -privKey string
         Private PGP key (default "priv.key")
   -sign
