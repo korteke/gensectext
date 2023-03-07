@@ -53,7 +53,7 @@ type SecText struct {
 func init() {
 	configFile = flag.String("configFile", "config.json", "Configuration file for template")
 	privateKey = flag.String("privKey", "priv.key", "Private PGP key")
-	passphrase = flag.String("passphrase", "", "Passphrase for private PGP key")
+	passphrase = flag.String("passphrase", "", "Passphrase for the private PGP key")
 	generateKeys = flag.Bool("generateKeys", false, "Generate private PGP key")
 	generateTmpl = flag.Bool("generateTmpl", false, "Generate sample files")
 	name = flag.String("name", "", "Display name for PGP key")
@@ -108,7 +108,7 @@ func main() {
 			log.Fatalln("Error closing file", file.Name(), err)
 		}
 	}(file)
-	sectext := SecText{Expires: ExpiresTime()}
+	sectext := SecText{Expires: expiresTime()}
 
 	err = decoder.Decode(&sectext)
 	checkErr(err)
@@ -167,7 +167,7 @@ func main() {
 
 }
 
-func ExpiresTime() string {
+func expiresTime() string {
 	if *expDate != "" {
 		t, err := time.Parse("2006-01-02", *expDate)
 		if err != nil {

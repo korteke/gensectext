@@ -24,7 +24,7 @@ docker pull korteke/gensectext:latest
 
 docker run --rm -v $(pwd):/app korteke/gensectext:latest -generateTmpl   
 
-docker run --rm -v $(pwd):/app korteke/gensectext:latest -privKey /app/priv.key -passphrase "testtest"
+docker run --rm -v $(pwd):/app korteke/gensectext:latest -privKey /app/priv.key -passphrase "RealSecretPassphrase"
 ```
 
 # Usage
@@ -70,14 +70,14 @@ With docker you need to create these files manually to bind-mount directory.
 ### Generate private PGP key (Optional)
 Generate a new private pgp key if you do not have one already.
 ```
-➜  gensectext git:(main) ✗ ./gensectext -generateKeys -name "Test" -email "security@example.text" -passphrase testtest
+➜  gensectext git:(main) ✗ ./gensectext -generateKeys -name "Test" -email "security@example.text" -passphrase "RealSecretPassphrase"
 2022/11/27 14:48:17 Generated private PGP key: priv.key
 ➜  gensectext git:(main) ✗ 
 ```
 
 ### Default usage - Generate security.txt with PGP signature
 ```
-➜  gensectext git:(main) ✗ ./gensectext -privKey priv.key -passphrase RealSecretPassphrase
+➜  gensectext git:(main) ✗ ./gensectext -privKey priv.key -passphrase "RealSecretPassphrase"
 2022/11/27 02:35:36 Security.txt file(s) generated!
 ➜  gensectext git:(main) ✗
 ```
@@ -93,7 +93,7 @@ Generate a new private pgp key if you do not have one already.
 * security.tmpl is a template for the security.txt -file, using [Go templating engine](https://pkg.go.dev/text/template)
 * config.json contains values for template. All RFC-fields should be supported. If you don't want something, just remove it from config.json. Contact and Expires fields are required, all others are optional.   
   
-The Expires field is calculated to be 11 months from *time.Now()*
+The Expires field is calculated to be 12 months from *time.Now()*
 
 # Output
 security.txt.asc (without signature)
